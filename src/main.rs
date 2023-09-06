@@ -4,7 +4,19 @@ mod timer;
 
 fn main() {
     App::new()
-        .add_plugins(DefaultPlugins)
+        .add_plugins(
+            DefaultPlugins
+                .set(WindowPlugin {
+                    primary_window: Some(Window {
+                        title: "Pomodoro".into(),
+                        resolution: (640.0, 480.0).into(),
+                        resizable: false,
+                        ..default()
+                    }),
+                    ..default()
+                })
+                .build(),
+        )
         .add_event::<timer::BreakDoneEvent>()
         .add_event::<timer::WorkDoneEvent>()
         .add_systems(Startup, setup)
