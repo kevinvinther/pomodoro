@@ -2,9 +2,9 @@ use bevy::prelude::*;
 
 mod timer;
 
-const NORMAL_BUTTON: Color = Color::rgb(0.15, 0.15, 0.15);
-const HOVERED_BUTTON: Color = Color::rgb(0.25, 0.25, 0.25);
-const PRESSED_BUTTON: Color = Color::rgb(0.35, 0.75, 0.35);
+const NORMAL_BUTTON: Color = Color::rgb(0.2, 0.2, 0.2);
+const HOVERED_BUTTON: Color = Color::rgb(0.3, 0.3, 0.3);
+const PRESSED_BUTTON: Color = Color::rgb(0.5, 0.5, 0.5);
 
 fn main() {
     App::new()
@@ -54,7 +54,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             parent
                 .spawn(ButtonBundle {
                     style: Style {
-                        width: Val::Px(150.0),
+                        width: Val::Px(175.0),
                         height: Val::Px(65.0),
                         border: UiRect::all(Val::Px(5.0)),
                         // horizontally center child text
@@ -124,15 +124,15 @@ fn button_system(
             Interaction::Pressed => {
                 match paused_status {
                     Ok(true) => {
-                        text.sections[0].value = "Unpaused".to_string();
+                        text.sections[0].value = "Unpause".to_string();
                     }
                     Ok(false) => {
-                        text.sections[0].value = "Paused".to_string();
+                        text.sections[0].value = "Pause".to_string();
                     }
                     _ => panic!("No timer found"),
                 }
                 *color = PRESSED_BUTTON.into();
-                border_color.0 = Color::RED;
+                border_color.0 = Color::BLACK;
                 timer::toggle_timer(&mut pomodoro_timer); // Updated reference
             }
             Interaction::Hovered => {
@@ -146,7 +146,7 @@ fn button_system(
                     _ => panic!("No timer found"),
                 }
                 *color = HOVERED_BUTTON.into();
-                border_color.0 = Color::WHITE;
+                border_color.0 = Color::BLACK;
             }
             Interaction::None => {
                 match paused_status {
