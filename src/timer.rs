@@ -1,6 +1,12 @@
 use bevy::prelude::*;
 use std::time::Duration;
 
+#[derive(Event)]
+pub struct BreakDoneEvent;
+
+#[derive(Event)]
+pub struct WorkDoneEvent;
+
 /// Represents a pomodoro timer with a specific duration
 ///
 /// The timer keeps track of how long the user should focus on a task or take a break.
@@ -40,34 +46,29 @@ impl PomodoroTimer {
             current_state: TimerState::Work,
         }
     }
+}
 
-    /// Advances the timer by the given duration and updates the current state accordingly.
-    fn tick(&mut self, delta: Duration) {
-        match self.current_state {
+/// Advances the timer by the given duration and updates the current state accordingly.
+pub fn timer_tick(mut pomodoro_timer: Query<&mut PomodoroTimer>, time: Res<Time>) {
+    for mut entity in pomodoro_timer.iter_mut() {
+        match entity.current_state {
             TimerState::Work => {
-                self.work_timer.tick(delta);
+                entity.work_timer.tick(time.delta());
 
-                if self.work_timer.finished() {
-                    self.work_timer.reset();
-                    self.current_state = TimerState::Break;
+                if entity.work_timer.finished() {
+                    entity.work_timer.reset();
+                    entity.current_state = TimerState::Break;
                 }
             }
             TimerState::Break => {
-                self.break_timer.tick(delta);
+                entity.break_timer.tick(time.delta());
 
-                if self.break_timer.finished() {
-                    self.break_timer.reset();
-                    self.current_state = TimerState::Work;
+                if entity.break_timer.finished() {
+                    entity.break_timer.reset();
+                    entity.current_state = TimerState::Work;
                 }
             }
         };
-    }
-}
-
-/// Starts the timer by running the `tick` function, which ticks the timers.
-pub fn run_timer(mut q: Query<(Entity, &mut PomodoroTimer)>, time: Res<Time>) {
-    for (_entity, mut pomodoro_timer) in q.iter_mut() {
-        pomodoro_timer.tick(time.delta());
     }
 }
 

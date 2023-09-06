@@ -6,7 +6,7 @@ fn main() {
     App::new()
         .add_plugins(DefaultPlugins)
         .add_systems(Startup, setup)
-        .add_systems(Update, (timer::run_timer, timer::print_timer))
+        .add_systems(Update, (timer::timer_tick, timer::print_timer))
         .run();
 }
 
