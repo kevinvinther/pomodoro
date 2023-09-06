@@ -1,9 +1,11 @@
 use bevy::prelude::*;
 use std::time::Duration;
 
-#[derive(Event)]
+/// Event for when the break session has finished
+#[derive(Event, Resource)]
 pub struct BreakDoneEvent;
 
+/// Event for when the work session has finished
 #[derive(Event)]
 pub struct WorkDoneEvent;
 
@@ -49,7 +51,12 @@ impl PomodoroTimer {
 }
 
 /// Advances the timer by the given duration and updates the current state accordingly.
-pub fn timer_tick(mut pomodoro_timer: Query<&mut PomodoroTimer>, time: Res<Time>) {
+pub fn timer_tick(
+    mut pomodoro_timer: Query<&mut PomodoroTimer>,
+    time: Res<Time>,
+    mut work_done_event: EventWriter<WorkDoneEvent>,
+    mut break_done_event: EventWriter<BreakDoneEvent>,
+) {
     for mut entity in pomodoro_timer.iter_mut() {
         match entity.current_state {
             TimerState::Work => {
@@ -58,6 +65,7 @@ pub fn timer_tick(mut pomodoro_timer: Query<&mut PomodoroTimer>, time: Res<Time>
                 if entity.work_timer.finished() {
                     entity.work_timer.reset();
                     entity.current_state = TimerState::Break;
+                    work_done_event.send(WorkDoneEvent);
                 }
             }
             TimerState::Break => {
@@ -66,6 +74,7 @@ pub fn timer_tick(mut pomodoro_timer: Query<&mut PomodoroTimer>, time: Res<Time>
                 if entity.break_timer.finished() {
                     entity.break_timer.reset();
                     entity.current_state = TimerState::Work;
+                    break_done_event.send(BreakDoneEvent);
                 }
             }
         };
