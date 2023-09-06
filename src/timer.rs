@@ -95,3 +95,38 @@ pub fn print_timer(mut q: Query<(Entity, &PomodoroTimer)>) {
         );
     }
 }
+
+pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
+    for mut pomodoro_timer in q.iter_mut() {
+        match pomodoro_timer.current_state {
+            TimerState::Work => {
+                if pomodoro_timer.work_timer.paused() {
+                    pomodoro_timer.work_timer.unpause();
+                } else {
+                    pomodoro_timer.work_timer.pause();
+                }
+            }
+            TimerState::Break => {
+                if pomodoro_timer.break_timer.paused() {
+                    pomodoro_timer.break_timer.unpause();
+                } else {
+                    pomodoro_timer.break_timer.pause();
+                }
+            }
+        }
+    }
+}
+
+pub fn get_paused_status(q: &Query<&mut PomodoroTimer>) -> Result<bool, &'static str> {
+    for pomodoro_timer in q.iter() {
+        match pomodoro_timer.current_state {
+            TimerState::Break => {
+                return Ok(pomodoro_timer.break_timer.paused());
+            }
+            TimerState::Work => {
+                return Ok(pomodoro_timer.work_timer.paused());
+            }
+        }
+    }
+    Err("No timer found")
+}
