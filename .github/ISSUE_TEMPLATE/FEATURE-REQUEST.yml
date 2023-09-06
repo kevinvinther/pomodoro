@@ -1,0 +1,31 @@
+name: Feature Request
+description: Request a feature
+title: "[Feature]: "
+labels: ["feature"]
+body:
+  - type: checkboxes
+    id: issue-prerequisite
+    attributes:
+      label: Issues
+      options:
+        - label: I have checked [existing issues](https://github.com/kevinvinther/pomodoro/issues?q=is%3Aissue) and there are no existing ones with the same request.
+          required: true
+
+  - type: textarea
+    attributes:
+      label: "Short Feature Description"
+    validations:
+      required: true
+
+  - type: textarea
+    attributes:
+      label: "(Optional) Long Feature Description"
+    validations:
+      required: false
+
+  - type: textarea
+    attributes:
+      label: "Goals"
+      description: "What should be done for this feature to be implemented?"
+    validations:
+      required: true
