@@ -104,6 +104,8 @@ fn play_sound(
     }
 }
 
+/// Adds a clickable button, which, when pressed either pauses or unpauses currently active timer
+#[allow(clippy::type_complexity)]
 fn button_system(
     mut interaction_query: Query<
         (
@@ -133,7 +135,7 @@ fn button_system(
                 }
                 *color = PRESSED_BUTTON.into();
                 border_color.0 = Color::BLACK;
-                timer::toggle_timer(&mut pomodoro_timer); // Updated reference
+                timer::toggle_timer(&mut pomodoro_timer);
             }
             Interaction::Hovered => {
                 match paused_status {
