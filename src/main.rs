@@ -20,7 +20,7 @@ fn main() {
                     primary_window: Some(Window {
                         title: "Pomodoro".into(),
                         resolution: (640.0, 480.0).into(),
-                        resizable: false,
+                        resizable: true,
                         ..default()
                     }),
                     ..default()
@@ -34,7 +34,6 @@ fn main() {
             Update,
             (
                 timer::timer_tick,
-                timer::print_timer,
                 play_sound,
                 button_system,
                 work_text_update_system,
@@ -60,7 +59,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_text_alignment(TextAlignment::Left)
         .with_style(Style {
             position_type: PositionType::Absolute,
-            bottom: Val::Px(55.0),
+            top: Val::Px(5.0),
             left: Val::Px(15.0),
             ..default()
         }),
@@ -78,7 +77,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .with_text_alignment(TextAlignment::Left)
         .with_style(Style {
             position_type: PositionType::Absolute,
-            bottom: Val::Px(5.0),
+            top: Val::Px(55.0),
             left: Val::Px(15.0),
             ..default()
         }),
@@ -88,8 +87,8 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
         .spawn(NodeBundle {
             style: Style {
                 width: Val::Percent(100.0),
-                align_items: AlignItems::Center,
-                justify_content: JustifyContent::Center,
+                top: Val::Px(105.0),
+                left: Val::Px(15.0),
                 ..default()
             },
             ..default()
@@ -98,16 +97,15 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
             parent
                 .spawn(ButtonBundle {
                     style: Style {
-                        width: Val::Px(175.0),
-                        height: Val::Px(65.0),
-                        border: UiRect::all(Val::Px(5.0)),
+                        width: Val::Px(100.0),
+                        height: Val::Px(25.0),
                         // horizontally center child text
                         justify_content: JustifyContent::Center,
                         // vertically center child text
                         align_items: AlignItems::Center,
                         ..default()
                     },
-                    border_color: BorderColor(Color::BLACK),
+                    border_color: NORMAL_BUTTON.into(),
                     background_color: NORMAL_BUTTON.into(),
                     ..default()
                 })
@@ -116,7 +114,7 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
                         "Button",
                         TextStyle {
                             font: asset_server.load("fonts/FiraSans-Medium.ttf"),
-                            font_size: 40.0,
+                            font_size: 22.0,
                             color: Color::rgb(0.9, 0.9, 0.9),
                         },
                     ));
