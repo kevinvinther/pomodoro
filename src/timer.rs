@@ -48,6 +48,40 @@ impl PomodoroTimer {
             current_state: TimerState::Work,
         }
     }
+
+    /// Gets the work timer.
+    ///
+    /// # Returns
+    ///
+    /// * `Timer`: The work timer.
+    pub fn get_work_timer(&self) -> &Timer {
+        &self.work_timer
+    }
+
+    /// Gets the break timer.
+    ///
+    /// # Returns
+    ///
+    /// * `Timer`: The break timer.
+    pub fn get_break_timer(&self) -> &Timer {
+        &self.break_timer
+    }
+
+    /// Gets the remaining seconds for the work timer
+    ///
+    /// # Returns
+    /// * `f32`: The remaining seconds for the timer
+    pub fn get_work_timer_remaining_secs(&self) -> f32 {
+        self.work_timer.remaining_secs()
+    }
+
+    /// Gets the remaining seconds for the break timer
+    ///
+    /// # Returns
+    /// * `f32`: The remaining seconds for the timer
+    pub fn get_break_timer_remaining_secs(&self) -> f32 {
+        self.break_timer.remaining_secs()
+    }
 }
 
 /// Advances the timer by the given duration and updates the current state accordingly.
