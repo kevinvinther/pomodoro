@@ -6,6 +6,12 @@ const NORMAL_BUTTON: Color = Color::rgb(0.2, 0.2, 0.2);
 const HOVERED_BUTTON: Color = Color::rgb(0.3, 0.3, 0.3);
 const PRESSED_BUTTON: Color = Color::rgb(0.5, 0.5, 0.5);
 
+#[derive(Component)]
+struct WorkText;
+
+#[derive(Component)]
+struct BreakText;
+
 fn main() {
     App::new()
         .add_plugins(
@@ -31,6 +37,8 @@ fn main() {
                 timer::print_timer,
                 play_sound,
                 button_system,
+                work_text_update_system,
+                break_text_update_system,
             ),
         )
         .run();
@@ -40,6 +48,42 @@ fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
     // Spawn the pomodoro timer
     commands.spawn(timer::PomodoroTimer::new());
     commands.spawn(Camera2dBundle::default());
+    commands.spawn((
+        TextBundle::from_section(
+            "00:00",
+            TextStyle {
+                font: asset_server.load("fonts/FiraSans-Medium.ttf"),
+                font_size: 50.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_text_alignment(TextAlignment::Left)
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            bottom: Val::Px(55.0),
+            left: Val::Px(15.0),
+            ..default()
+        }),
+        WorkText,
+    ));
+    commands.spawn((
+        TextBundle::from_section(
+            "00:00",
+            TextStyle {
+                font: asset_server.load("fonts/FiraSans-Medium.ttf"),
+                font_size: 50.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_text_alignment(TextAlignment::Left)
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            bottom: Val::Px(5.0),
+            left: Val::Px(15.0),
+            ..default()
+        }),
+        BreakText,
+    ));
     commands
         .spawn(NodeBundle {
             style: Style {
@@ -163,6 +207,40 @@ fn button_system(
                 *color = NORMAL_BUTTON.into();
                 border_color.0 = Color::BLACK;
             }
+        }
+    }
+}
+
+/// Updates the "break timer" to the current time remaining in that timer
+fn break_text_update_system(
+    timer: Query<&timer::PomodoroTimer>,
+    mut break_text: Query<&mut Text, With<BreakText>>,
+) {
+    for pomodoro_timer in timer.iter() {
+        for mut text in break_text.iter_mut() {
+            let formatted = format!(
+                "{:02}:{:02}",
+                (pomodoro_timer.get_break_timer_remaining_secs() / 60.0).floor(),
+                (pomodoro_timer.get_break_timer_remaining_secs() % 60.0).floor(),
+            );
+            text.sections[0].value = formatted;
+        }
+    }
+}
+
+/// Updates the "work text" to the current time remaining in that timer
+fn work_text_update_system(
+    timer: Query<&timer::PomodoroTimer>,
+    mut work_text: Query<&mut Text, With<WorkText>>,
+) {
+    for pomodoro_timer in timer.iter() {
+        for mut text in work_text.iter_mut() {
+            let formatted = format!(
+                "{:02}:{:02}",
+                (pomodoro_timer.get_work_timer_remaining_secs() / 60.0).floor(),
+                (pomodoro_timer.get_work_timer_remaining_secs() % 60.0).floor(),
+            );
+            text.sections[0].value = formatted;
         }
     }
 }
