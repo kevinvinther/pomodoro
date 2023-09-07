@@ -130,6 +130,7 @@ pub fn print_timer(mut q: Query<(Entity, &PomodoroTimer)>) {
     }
 }
 
+/// Pause or unpause the timer depending on its current state
 pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
     for mut pomodoro_timer in q.iter_mut() {
         match pomodoro_timer.current_state {
@@ -151,8 +152,9 @@ pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
     }
 }
 
+/// Get the status of whether or not the timer is paused
 pub fn get_paused_status(q: &Query<&mut PomodoroTimer>) -> Result<bool, &'static str> {
-    for pomodoro_timer in q.iter() {
+    if let Some(pomodoro_timer) = q.iter().next() {
         match pomodoro_timer.current_state {
             TimerState::Break => {
                 return Ok(pomodoro_timer.break_timer.paused());
