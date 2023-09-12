@@ -34,7 +34,7 @@ fn main() {
         .run();
 }
 
-fn setup(mut commands: Commands, asset_server: Res<AssetServer>) {
+fn setup(mut commands: Commands) {
     // Spawn the pomodoro timer
     commands.spawn(timer::PomodoroTimer::new());
     commands.spawn(Camera2dBundle::default());

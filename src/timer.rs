@@ -54,6 +54,7 @@ impl PomodoroTimer {
     /// # Returns
     ///
     /// * `Timer`: The work timer.
+    #[allow(unused)]
     pub fn get_work_timer(&self) -> &Timer {
         &self.work_timer
     }
@@ -63,6 +64,7 @@ impl PomodoroTimer {
     /// # Returns
     ///
     /// * `Timer`: The break timer.
+    #[allow(unused)]
     pub fn get_break_timer(&self) -> &Timer {
         &self.break_timer
     }
@@ -112,21 +114,6 @@ pub fn timer_tick(
                 }
             }
         };
-    }
-}
-
-/// Prints both the work and break timers in the format
-/// `25:00   05:00`
-/// Where 25:00 is work, and 05:00 is break.
-pub fn print_timer(mut q: Query<(Entity, &PomodoroTimer)>) {
-    for (_entity, pomodoro_timer) in q.iter_mut() {
-        println!(
-            "{:02}:{:02} \t {:02}:{:02}",
-            (pomodoro_timer.work_timer.remaining_secs() / 60.0).floor(),
-            (pomodoro_timer.work_timer.remaining_secs() % 60.0).floor(),
-            (pomodoro_timer.break_timer.remaining_secs() / 60.0).floor(),
-            (pomodoro_timer.break_timer.remaining_secs() % 60.0).floor()
-        );
     }
 }
 
