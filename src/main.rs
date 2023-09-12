@@ -2,9 +2,9 @@ use bevy::prelude::*;
 use bevy::time::common_conditions::on_timer;
 use std::time::Duration;
 
+mod score;
 mod timer;
 mod ui;
-mod score;
 
 fn main() {
     App::new()
@@ -23,7 +23,15 @@ fn main() {
         )
         .add_event::<timer::BreakDoneEvent>()
         .add_event::<timer::WorkDoneEvent>()
-        .add_systems(Startup, (setup, ui::setup_button, ui::setup_timer_text))
+        .add_systems(
+            Startup,
+            (
+                setup,
+                ui::setup_button,
+                ui::setup_timer_text,
+                ui::setup_score,
+            ),
+        )
         .add_systems(
             Update,
             (
@@ -32,7 +40,8 @@ fn main() {
                 ui::button_system,
                 ui::work_text_update_system,
                 ui::break_text_update_system,
-                score::increase_score.run_if(on_timer(Duration::from_secs(1)))
+                score::increase_score.run_if(on_timer(Duration::from_secs(1))),
+                ui::score_text_update_system.run_if(on_timer(Duration::from_secs(1))),
             ),
         )
         .run();

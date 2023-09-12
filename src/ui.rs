@@ -1,5 +1,6 @@
 use bevy::prelude::*;
 
+use crate::score;
 use crate::timer;
 
 const NORMAL_BUTTON: Color = Color::rgb(0.2, 0.2, 0.2);
@@ -11,6 +12,9 @@ pub struct WorkText;
 
 #[derive(Component)]
 pub struct BreakText;
+
+#[derive(Component)]
+pub struct ScoreText;
 
 pub fn setup_button(mut commands: Commands, asset_server: Res<AssetServer>) {
     commands
@@ -50,6 +54,27 @@ pub fn setup_button(mut commands: Commands, asset_server: Res<AssetServer>) {
                     ));
                 });
         });
+}
+
+pub fn setup_score(mut commands: Commands, asset_server: Res<AssetServer>) {
+    commands.spawn((
+        TextBundle::from_section(
+            "0",
+            TextStyle {
+                font: asset_server.load("fonts/FiraSans-Medium.ttf"),
+                font_size: 50.0,
+                color: Color::WHITE,
+            },
+        )
+        .with_text_alignment(TextAlignment::Center)
+        .with_style(Style {
+            position_type: PositionType::Absolute,
+            left: Val::Px(15.0),
+            bottom: Val::Px(0.0),
+            ..default()
+        }),
+        ScoreText,
+    ));
 }
 
 pub fn setup_timer_text(mut commands: Commands, asset_server: Res<AssetServer>) {
@@ -189,4 +214,14 @@ pub fn work_text_update_system(
             text.sections[0].value = formatted;
         }
     }
+}
+
+pub fn score_text_update_system(
+    mut score_text: Query<&mut Text, With<ScoreText>>,
+    score: Res<score::Score>,
+) {
+        for mut text in score_text.iter_mut() {
+            text.sections[0].value = format!("{}", score.0);
+            text.alignment = TextAlignment::Right;
+        }
 }
