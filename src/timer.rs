@@ -54,7 +54,6 @@ impl PomodoroTimer {
     /// # Returns
     ///
     /// * `Timer`: The work timer.
-    #[allow(unused)]
     pub fn get_work_timer(&self) -> &Timer {
         &self.work_timer
     }
@@ -64,7 +63,6 @@ impl PomodoroTimer {
     /// # Returns
     ///
     /// * `Timer`: The break timer.
-    #[allow(unused)]
     pub fn get_break_timer(&self) -> &Timer {
         &self.break_timer
     }

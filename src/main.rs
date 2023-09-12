@@ -1,7 +1,10 @@
 use bevy::prelude::*;
+use bevy::time::common_conditions::on_timer;
+use std::time::Duration;
 
 mod timer;
 mod ui;
+mod score;
 
 fn main() {
     App::new()
@@ -29,6 +32,7 @@ fn main() {
                 ui::button_system,
                 ui::work_text_update_system,
                 ui::break_text_update_system,
+                score::increase_score.run_if(on_timer(Duration::from_secs(1)))
             ),
         )
         .run();
@@ -38,6 +42,7 @@ fn setup(mut commands: Commands) {
     // Spawn the pomodoro timer
     commands.spawn(timer::PomodoroTimer::new());
     commands.spawn(Camera2dBundle::default());
+    commands.insert_resource(score::Score(0));
 }
 
 /// Plays relevant sounds on events
