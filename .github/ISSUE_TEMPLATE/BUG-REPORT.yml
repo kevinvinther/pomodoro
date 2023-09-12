@@ -6,12 +6,12 @@ body:
   - type: checkboxes
     id: faq-prerequisite
     attributes:
-      label: Prerequisites
+      label: Prerequisites (must choose one)
       options:
         - label: I am using the latest stable release
-          required: true
+          required: false
         - label: I am using the latest unstable release
-          required: true
+          required: false
   - type: dropdown
     id: operating-system
     attributes:
