@@ -3,9 +3,7 @@ use bevy::prelude::*;
 use crate::score;
 use crate::timer;
 
-const NORMAL_BUTTON: Color = Color::rgb(0.2, 0.2, 0.2);
-const HOVERED_BUTTON: Color = Color::rgb(0.3, 0.3, 0.3);
-const PRESSED_BUTTON: Color = Color::rgb(0.5, 0.5, 0.5);
+const NORMAL_BUTTON: Color = Color::rgb(34.0/255.0, 111.0/255.0, 84.0/255.0);
 
 #[derive(Component)]
 pub struct WorkText;
@@ -148,7 +146,7 @@ pub fn button_system(
                     }
                     _ => panic!("No timer found"),
                 }
-                *color = PRESSED_BUTTON.into();
+                *color = NORMAL_BUTTON.into();
                 border_color.0 = Color::BLACK;
                 timer::toggle_timer(&mut pomodoro_timer);
             }
@@ -162,7 +160,7 @@ pub fn button_system(
                     }
                     _ => panic!("No timer found"),
                 }
-                *color = HOVERED_BUTTON.into();
+                *color = NORMAL_BUTTON.into();
                 border_color.0 = Color::BLACK;
             }
             Interaction::None => {

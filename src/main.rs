@@ -52,6 +52,7 @@ fn setup(mut commands: Commands) {
     commands.spawn(timer::PomodoroTimer::new());
     commands.spawn(Camera2dBundle::default());
     commands.insert_resource(score::Score(0));
+    commands.insert_resource(ClearColor(Color::rgb(0.5294117647, 0.76470588235, 0.56078431372 )));
 }
 
 /// Plays relevant sounds on events
