@@ -20,7 +20,8 @@ pub struct PomodoroTimer {
 }
 
 /// The state of the current timer; whether it is a Work or Break timer.
-enum TimerState {
+#[derive(Debug)]
+pub enum TimerState {
     Work,
     Break,
 }

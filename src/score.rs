@@ -24,8 +24,24 @@ pub fn increase_score(
     pomodoro_timer: Query<&mut timer::PomodoroTimer>,
 ) {
     for timer in pomodoro_timer.iter() {
-        if !(timer.get_work_timer().paused() && timer.get_break_timer().paused()) {
-            score.0 += 1;
+
+        // TODO: Is there an easier and/or more efficient way to do this?
+        // IDEA: Maybe have a function in the implementation that returns?
+        //       However, this doesn't really fix the constant "match"es.
+        //       I feel like this is too many calculations
+        match timer.get_current_state() {
+            timer::TimerState::Break => {
+                if !timer.get_break_timer().paused() {
+                    score.0 += 1;
+                }
+            },
+            timer::TimerState::Work => {
+                if !timer.get_work_timer().paused() {
+                    score.0 += 1;
+                }
+            }
+            err => panic!("An error has occured, could not get state WORK or BREAK, instead, got: {:?}", err),
         }
+
     }
 }
