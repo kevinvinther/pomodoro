@@ -26,7 +26,7 @@ pub enum TimerState {
     Break,
 }
 
-/// Starts a timer from a u64 representing the number of seconds
+/// Starts a timer from a `u64` representing the number of seconds
 fn start_timer(seconds: u64) -> Timer {
     Timer::new(Duration::from_secs(seconds), TimerMode::Once)
 }
@@ -82,6 +82,14 @@ impl PomodoroTimer {
     /// * `f32`: The remaining seconds for the timer
     pub fn get_break_timer_remaining_secs(&self) -> f32 {
         self.break_timer.remaining_secs()
+    }
+
+    /// Gets the current state
+    ///
+    /// # Returns
+    /// * `&timerState` the current timer
+    pub fn get_current_state(&self) -> &TimerState {
+        &self.current_state
     }
 }
 
@@ -141,12 +149,12 @@ pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
 /// Get the status of whether or not the timer is paused
 pub fn get_paused_status(q: &Query<&mut PomodoroTimer>) -> Result<bool, &'static str> {
     if let Some(pomodoro_timer) = q.iter().next() {
-        match pomodoro_timer.current_state {
+        return match pomodoro_timer.current_state {
             TimerState::Break => {
-                return Ok(pomodoro_timer.break_timer.paused());
+                Ok(pomodoro_timer.break_timer.paused())
             }
             TimerState::Work => {
-                return Ok(pomodoro_timer.work_timer.paused());
+                Ok(pomodoro_timer.work_timer.paused())
             }
         }
     }

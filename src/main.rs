@@ -50,9 +50,10 @@ fn main() {
 fn setup(mut commands: Commands) {
     // Spawn the pomodoro timer
     commands.spawn(timer::PomodoroTimer::new());
-    commands.spawn(Camera2dBundle::default());
-    commands.insert_resource(score::Score(0));
-    commands.insert_resource(ClearColor(Color::rgb(0.5294117647, 0.76470588235, 0.56078431372 )));
+    commands.spawn(Camera2dBundle::default()); // Setup a 2D camera, will be used in the future.
+    commands.insert_resource(score::Score(0)); // Set the global resource `score` to be 0.
+                                                       // In the future this should be loaded from a savefile
+    commands.insert_resource(ClearColor(Color::rgb(0.5294117647, 0.76470588235, 0.56078431372 ))); // Add a background color
 }
 
 /// Plays relevant sounds on events
@@ -62,16 +63,22 @@ fn play_sound(
     asset_server: Res<AssetServer>,
     mut commands: Commands,
 ) {
+    // If there is a break event
     if !ev_break_done.is_empty() {
+        // Remove the event
         ev_break_done.clear();
+        // Play the sound
         commands.spawn(AudioBundle {
             source: asset_server.load("sounds/break_done.ogg"),
             settings: PlaybackSettings::DESPAWN,
         });
     }
 
+    // If there is a work event
     if !ev_work_done.is_empty() {
+        // Remove the event
         ev_work_done.clear();
+        // Play the sound
         commands.spawn(AudioBundle {
             source: asset_server.load("sounds/work_done.ogg"),
             settings: PlaybackSettings::DESPAWN,
