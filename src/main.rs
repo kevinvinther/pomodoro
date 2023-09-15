@@ -40,8 +40,8 @@ fn main() {
                 ui::button_system,
                 ui::work_text_update_system,
                 ui::break_text_update_system,
-                score::increase_score.run_if(on_timer(Duration::from_secs(1))),
-                ui::score_text_update_system.run_if(on_timer(Duration::from_secs(1))),
+                score::increase_score.run_if(on_timer(Duration::from_secs(1))), // TODO: The on_timer might be the reason for delay?
+                ui::score_text_update_system,
             ),
         )
         .run();
@@ -52,8 +52,8 @@ fn setup(mut commands: Commands) {
     commands.spawn(timer::PomodoroTimer::new());
     commands.spawn(Camera2dBundle::default()); // Setup a 2D camera, will be used in the future.
     commands.insert_resource(score::Score(0)); // Set the global resource `score` to be 0.
-                                                       // In the future this should be loaded from a savefile
-    commands.insert_resource(ClearColor(Color::rgb(0.5294117647, 0.76470588235, 0.56078431372 ))); // Add a background color
+                                               // In the future this should be loaded from a savefile
+    commands.insert_resource(ClearColor(Color::rgb_u8(135, 195, 143))); // Add a background color
 }
 
 /// Plays relevant sounds on events

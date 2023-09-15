@@ -3,7 +3,7 @@ use bevy::prelude::*;
 use crate::score;
 use crate::timer;
 
-const NORMAL_BUTTON: Color = Color::rgb(34.0/255.0, 111.0/255.0, 84.0/255.0);
+const NORMAL_BUTTON: Color = Color::rgb(34.0 / 255.0, 111.0 / 255.0, 84.0 / 255.0); // TODO: Why can't we use rgb_u8 function here?
 
 #[derive(Component)]
 pub struct WorkText;
@@ -218,8 +218,8 @@ pub fn score_text_update_system(
     mut score_text: Query<&mut Text, With<ScoreText>>,
     score: Res<score::Score>,
 ) {
-        for mut text in score_text.iter_mut() {
-            text.sections[0].value = format!("{}", score.0);
-            text.alignment = TextAlignment::Right;
-        }
+    for mut text in score_text.iter_mut() {
+        text.sections[0].value = format!("{}", score.0);
+        text.alignment = TextAlignment::Right;
+    }
 }
