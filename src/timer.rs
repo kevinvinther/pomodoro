@@ -125,6 +125,14 @@ pub fn timer_tick(
 }
 
 /// Pause or unpause the timer depending on its current state
+///
+/// # Examples
+///
+/// ```
+/// let timer = PomodoroTimer::new();
+/// toggle_timer(&mut timer);
+/// assert_eq!(timer.get_work_timer().paused(), true);
+/// ```
 pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
     for mut pomodoro_timer in q.iter_mut() {
         match pomodoro_timer.current_state {
@@ -150,13 +158,22 @@ pub fn toggle_timer(q: &mut Query<&mut PomodoroTimer>) {
 pub fn get_paused_status(q: &Query<&mut PomodoroTimer>) -> Result<bool, &'static str> {
     if let Some(pomodoro_timer) = q.iter().next() {
         return match pomodoro_timer.current_state {
-            TimerState::Break => {
-                Ok(pomodoro_timer.break_timer.paused())
-            }
-            TimerState::Work => {
-                Ok(pomodoro_timer.work_timer.paused())
-            }
-        }
+            TimerState::Break => Ok(pomodoro_timer.break_timer.paused()),
+            TimerState::Work => Ok(pomodoro_timer.work_timer.paused()),
+        };
     }
     Err("No timer found")
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn test_pomodoro_timer_initialization() {
+        let timer = PomodoroTimer::new();
+        assert_eq!(timer.get_work_timer_remaining_secs(), 60.0 * 25.0);
+        assert_eq!(timer.get_break_timer_remaining_secs(), 60.0 * 5.0);
+        matches!(*timer.get_current_state(), TimerState::Work);
+    }
 }
