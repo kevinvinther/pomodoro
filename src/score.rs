@@ -11,10 +11,12 @@ impl Score {
         Score(0)
     }
 
+    #[allow(unused)]
     pub fn get_score(&self) -> &Score {
         self
     }
 
+    #[allow(unused)]
     pub fn get_score_value(&self) -> u64 {
         self.0
     }
@@ -33,6 +35,10 @@ pub fn increment_score_if_unpaused(
         .sum();
 
     for timer in pomodoro_timer.iter() {
+        // TODO: Is there an easier and/or more efficient way to do this?
+        // IDEA: Maybe have a function in the implementation that returns?
+        //       However, this doesn't really fix the constant "match"es.
+        //       I feel like this is too many calculations
         // Get the current type of timer, and then check if relevant timer is paused.
         // If not, increment the score.
         match timer.get_current_state() {

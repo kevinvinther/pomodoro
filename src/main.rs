@@ -42,8 +42,8 @@ fn main() {
                 ui::button_system,
                 ui::work_text_update_system,
                 ui::break_text_update_system,
-                score::increment_score_if_unpaused.run_if(on_timer(Duration::from_secs(1))),
-                ui::score_text_update_system.run_if(on_timer(Duration::from_secs(1))),
+                score::increment_score_if_unpaused.run_if(on_timer(Duration::from_secs(1))), // TODO: The on_timer might be the reason for delay?
+                ui::score_text_update_system,
             ),
         )
         .run();
@@ -56,11 +56,7 @@ fn setup(mut commands: Commands) {
     commands.insert_resource(score::Score::new()); // Set the global resource `score` to be 0.
                                                    // In the future this should be loaded from a savefile
     commands.insert_resource(worker_agent::WorkerAgent::new());
-    commands.insert_resource(ClearColor(Color::rgb(
-        0.5294117647,
-        0.76470588235,
-        0.56078431372,
-    ))); // Add a background color
+    commands.insert_resource(ClearColor(Color::rgb_u8(135, 195, 143))); // Add a background color
 }
 
 /// Plays relevant sounds on events
